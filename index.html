@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+    <title>Канцелярский магазин «Тетрабум»</title>
+
+    <!-- ВНЕШНИЙ CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Иконка вкладки -->
+    <link rel="icon" type="image/png" href="img/favicon.png">
+</head>
+
+<body>
+
+<!-- ========================================================= -->
+<!--   HEADER — ШАПКА САЙТА                                   -->
+<!-- ========================================================= -->
+<header class="header">
+    <div class="logo">✏ Тетрабум</div>
+
+    <nav class="nav">
+        <a class="active-link" onclick="showSection('home')">Главная</a>
+        <a onclick="showSection('catalog')">Каталог</a>
+        <a onclick="showSection('sets')">Наборы</a>
+        <a onclick="showSection('favorites')">Избранное</a>
+        <a onclick="showSection('order')">Заказ</a>
+        <a onclick="showSection('contacts')">Контакты</a>
+    </nav>
+
+    <div class="cart-info" onclick="openCart()">
+        🛒 <span id="cart-count">0</span> шт • <span id="cart-total">0 ₽</span>
+
+
+    </div>
+</header>
+
+
+<!-- ========================================================= -->
+<!--   ГЛАВНАЯ — HERO БЛОК                                     -->
+<!-- ========================================================= -->
+<section id="home" class="hero-section page-section active">
+   <hr class="section-line">
+
+    <div class="hero-content">
+        <h1 class="hero-title">Канцелярский магазин «Тетрабум»</h1>
+
+        <p class="hero-subtitle">
+            Онлайн-каталог канцтоваров с корзиной, ИИ-помощником, наборами,
+            интеллектуальными рекомендациями и анализом выбранных товаров.
+            Проект разработан в рамках дипломной работы.
+        </p>
+
+        <div class="hero-buttons">
+            <button class="hero-button" onclick="showSection('catalog')">
+                Перейти в каталог
+            </button>
+
+
+        </div>
+
+        <div class="hero-features">
+            <p>✓ Интеллектуальные подборки наборов</p>
+            <p>✓ Гибкая корзина с анализом содержимого</p>
+            <p>✓ Режим дипломного проекта (без реальной оплаты)</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- Этот <main> продолжается в частях 2–5 -->
+
+<main>
+<!-- ========================================================= -->
+<!--   КАТАЛОГ ТОВАРОВ                                         -->
+<!-- ========================================================= -->
+
+<section id="catalog" class="block page-section">
+   <hr class="section-line">
+
+    <h2>Каталог товаров</h2>
+    <!-- Панель управления -->
+    <div class="controls">
+
+        <input id="searchInput" type="text"
+               placeholder="Поиск по товарам…"
+               autocomplete="off"
+               oninput="handleSearchInput()">
+
+        <button id="searchBtn" onclick="searchProduct()">Найти</button>
+
+        <div class="price-filter">
+            <input type="number" id="priceMin" placeholder="Цена от">
+            <input type="number" id="priceMax" placeholder="до">
+            <button onclick="applyFilters()">OK</button>
+        </div>
+    </div>
+
+    <!-- Умные подсказки -->
+    <div id="search-suggestions" class="search-suggestions"></div>
+
+    <!-- Фильтры категорий -->
+    <div class="filters">
+        <button class="filter-btn active" onclick="setCategory('all')">Все</button>
+        <button class="filter-btn" onclick="setCategory('school')">Школа</button>
+        <button class="filter-btn" onclick="setCategory('student')">Студенты</button>
+        <button class="filter-btn" onclick="setCategory('office')">Офис</button>
+        <button class="filter-btn" onclick="setCategory('artist')">Творчество</button>
+        <button class="filter-btn" onclick="setCategory('design')">Дизайн</button>
+        <button class="filter-btn" onclick="setCategory('math')">Чертёж</button>
+        <button class="filter-btn" onclick="setCategory('exam')">Экзамены</button>
+        <button class="filter-btn" onclick="setCategory('pro')">PRO-наборы</button>
+    </div>
+
+    <!-- Сетка товаров -->
+    <div id="productList" class="products"></div>
+
+    <!-- Пагинация -->
+    <div id="pagination" class="pagination"></div>
+</section>
+
+
+<!-- ========================================================= -->
+<!--   ИЗБРАННОЕ                                               -->
+<!-- ========================================================= -->
+<section id="favorites" class="block page-section">
+  <hr class="section-line">
+
+    <h2>Избранные товары</h2>
+
+    <p class="section-desc">
+        Здесь появляются товары, которые вы отметили сердечком в каталоге.
+    </p>
+
+    <div id="favoritesList" class="products"></div>
+</section>
+<!-- ========================================================= -->
+<!--   ИИ-ПОМОЩНИК (РАСШИРЕННЫЙ РЕЖИМ)                        -->
+<!-- ========================================================= -->
+
+
+<!-- ========================================================= -->
+<!--   ГОТОВЫЕ НАБОРЫ ТОВАРОВ                                  -->
+<!-- ========================================================= -->
+
+<section id="sets" class="block page-section">
+   <hr class="section-line">
+
+    <h2>Готовые наборы</h2>
+
+    <p class="section-desc">Добавьте набор целиком — удобно при оформлении заказа.</p>
+
+    <div class="sets-list">
+
+        <div class="set-card">
+            <h3>Набор школьника (1–4 класс)</h3>
+            <p class="set-desc">Базовый комплект для младших классов.</p>
+            <ul class="set-items">
+                <li>Ручка синяя</li>
+                <li>Тетрадь 48 листов</li>
+                <li>Линейка</li>
+                <li>Цветные стикеры</li>
+            </ul>
+            <button onclick="addSetToCart('schoolJunior')">Добавить</button>
+        </div>
+
+        <div class="set-card">
+            <h3>Набор школьника (5–11 класс)</h3>
+            <p class="set-desc">Для средней и старшей школы.</p>
+            <ul class="set-items">
+                <li>Ручки (синяя + чёрная)</li>
+                <li>Тетрадь 96 листов</li>
+                <li>Дневник</li>
+                <li>Маркер</li>
+            </ul>
+            <button onclick="addSetToCart('schoolSenior')">Добавить</button>
+        </div>
+
+        <div class="set-card">
+            <h3>Набор студента</h3>
+            <p class="set-desc">Идеально для конспектов и лекций.</p>
+            <ul class="set-items">
+                <li>Блокнот</li>
+                <li>Маркер</li>
+                <li>Папка</li>
+                <li>Стикеры</li>
+            </ul>
+            <button onclick="addSetToCart('student')">Добавить</button>
+        </div>
+
+        <div class="set-card">
+            <h3>Офисный набор PRO</h3>
+            <p class="set-desc">Бумага, папки, степлер и органайзер.</p>
+            <ul class="set-items">
+                <li>Бумага А4</li>
+                <li>Папка</li>
+                <li>Степлер</li>
+                <li>Органайзер</li>
+            </ul>
+            <button onclick="addSetToCart('officePro')">Добавить</button>
+        </div>
+
+        <div class="set-card">
+            <h3>Набор для творчества</h3>
+            <p class="set-desc">Стартовый комплект для рисования.</p>
+            <ul class="set-items">
+                <li>Фломастеры</li>
+                <li>Альбом</li>
+                <li>Кисти</li>
+                <li>Карандаши</li>
+            </ul>
+            <button onclick="addSetToCart('artistBasic')">Добавить</button>
+        </div>
+
+        <div class="set-card">
+            <h3>Набор художника PRO</h3>
+            <p class="set-desc">Расширенный набор для творчества.</p>
+            <ul class="set-items">
+                <li>Акварель</li>
+                <li>Гуашь</li>
+                <li>Скетчбук</li>
+                <li>Кисти PRO</li>
+            </ul>
+            <button onclick="addSetToCart('artistPro')">Добавить</button>
+        </div>
+
+    </div>
+</section>
+<!-- ========================================================= -->
+<!--   КОРЗИНА — МОДАЛЬНОЕ ОКНО                               -->
+<!-- ========================================================= -->
+
+
+
+<!-- ========================================================= -->
+<!--   МОДАЛЬНОЕ ОКНО ТОВАРА                                   -->
+<!-- ========================================================= -->
+<div id="productModal" class="pm-backdrop hidden" onclick="closeProductModal(event)">
+    <div class="pm-window">
+
+        <!-- Кнопка закрытия -->
+        <button class="pm-close" onclick="closeProductModal(event)">×</button>
+
+        <!-- Фото товара -->
+        <div class="pm-image-block">
+            <img id="pm-image" alt="">
+        </div>
+
+        <!-- Информация -->
+        <div class="pm-info">
+            <h3 id="pm-title"></h3>
+            <div id="pm-category" class="pm-category"></div>
+            <div id="pm-desc"></div>
+            <div id="pm-price" class="pm-price"></div>
+
+            <button class="pm-add-btn" onclick="addPMtoCart()">Добавить в корзину</button>
+        </div>
+
+     </div>
+</div>
+
+<!-- ========================================================= -->
+<!--   БЛОК ЗАКАЗА                                              -->
+<!-- ========================================================= -->
+
+<section id="order" class="block page-section">
+   <hr class="section-line">
+
+    <h2>Оформление заказа</h2>
+
+    <p class="section-desc">
+        Данные не отправляются — демонстрационный режим для дипломного проекта.
+    </p>
+
+    <div class="order-container">
+
+        <form id="orderForm">
+
+            <div class="order-form-group">
+                <label>ФИО:</label>
+                <input type="text" id="customerName" required>
+            </div>
+
+            <div class="order-form-group">
+                <label>Телефон:</label>
+                <input type="tel" id="customerPhone" required>
+            </div>
+
+            <div class="order-form-group">
+                <label>Email:</label>
+                <input type="email" id="customerEmail" required>
+            </div>
+
+            <div class="order-form-group">
+                <label>Способ доставки:</label>
+                <input type="text" id="deliveryType"
+                       placeholder="Курьер / Самовывоз" required>
+            </div>
+
+            <div class="order-form-group">
+                <label>Комментарий:</label>
+                <textarea id="orderComment"
+                          placeholder="Например: позвонить заранее…"></textarea>
+            </div>
+
+            <button type="submit" class="order-submit-btn">
+                Подтвердить заказ
+            </button>
+        </form>
+
+        <div id="orderMessage"></div>
+    </div>
+</section>
+
+
+<!-- ========================================================= -->
+<!--   КОНТАКТЫ                                                 -->
+<!-- ========================================================= -->
+
+<section id="contacts" class="block page-section">
+    <hr class="section-line">
+
+    <h2>Контакты</h2>
+
+    <p>📍 Махачкала, ул. Ленина, д. 5</p>
+    <p>☎ +7 (999) 123-45-67</p>
+    <p>✉ info@tetrabum.ru</p>
+</section>
+
+<!-- ========================================================= -->
+<!--   ЧАТ-БОТ                                                 -->
+<!-- ========================================================= -->
+
+<div id="chatbot-toggle" class="chatbot-toggle" onclick="toggleChatbot()">
+    💬 Чат
+</div>
+
+<div id="chatbot" class="chatbot-window chatbot-hidden">
+    <div class="chatbot-header">
+        <span>ИИ-чат</span>
+        <button onclick="toggleChatbot()" class="chatbot-close-btn">×</button>
+    </div>
+
+    <div id="chatbot-messages" class="chatbot-messages"></div>
+
+    <div class="chatbot-input-row">
+        <form id="chatbot-form" onsubmit="sendChatMessage(event)">
+            <input id="chatbot-input" type="text"
+                   placeholder="Введите сообщение…">
+            <button class="chatbot-send-btn">➤</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- ========================================================= -->
+<!--   TOAST — УВЕДОМЛЕНИЯ                                     -->
+<!-- ========================================================= -->
+
+<div id="toast" class="toast"></div>
+
+
+<!-- ========================================================= -->
+<!--   КНОПКА «ВВЕРХ»                                          -->
+<!-- ========================================================= -->
+
+<button id="toTop" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+    ▲
+</button>
+
+
+<!-- ========================================================= -->
+<!--   НИЖНЕЕ МОБИЛЬНОЕ МЕНЮ                                   -->
+<!-- ========================================================= -->
+
+<div class="mobile-bottom-nav">
+    <button onclick="showSection('home')" class="mb-item" id="mb-home">
+        <span class="mb-icon">🏠</span>
+        <span class="mb-text">Главная</span>
+    </button>
+
+    <button onclick="showSection('catalog')" class="mb-item" id="mb-catalog">
+        <span class="mb-icon">🗂</span>
+        <span class="mb-text">Каталог</span>
+    </button>
+
+    <button onclick="showSection('favorites')" class="mb-item" id="mb-fav">
+        <span class="mb-icon">❤</span>
+        <span class="mb-text">Избранное</span>
+    </button>
+
+    <button onclick="openCart()" class="mb-item" id="mb-cart">
+        <span class="mb-icon">🛒</span>
+        <span class="mb-text">Корзина</span>
+    </button>
+
+    <button class="mb-item" id="openMobileAI">
+    <span class="mb-icon">🤖</span>
+    ИИ
+    </button>
+
+</div>
+
+<!-- ========================================================= -->
+<!--   СКРИПТЫ                                                 -->
+<!-- ========================================================= -->
+
+<!-- Основной JavaScript -->
+<script src="script.js"></script>
+<script src="ai.js"></script>
+
+<!-- Показ кнопки «Вверх» при прокрутке -->
+<script>
+    window.addEventListener("scroll", () => {
+        const btn = document.getElementById("toTop");
+        if (!btn) return;
+
+        if (window.scrollY > 250) {
+            btn.classList.add("show");
+        } else {
+            btn.classList.remove("show");
+        }
+    });
+</script>
+
+
+<!-- ========================================================= -->
+<!--   ЗАВЕРШЕНИЕ                                              -->
+<!-- ========================================================= -->
+<!-- ============================ -->
+<!--   MODAL — КОРЗИНА           -->
+<!-- ============================ -->
+
+<div class="cart-backdrop hidden" id="cart-backdrop">
+    <div class="cart-window">
+
+        <button id="cart-close">&times;</button>
+
+        <h2>Корзина</h2>
+
+        <div id="cartItems"></div>
+
+        <div class="cart-total-row">
+            <span>Итого:</span>
+            <span id="cartTotal">0 ₽</span>
+        </div>
+
+        <div class="cart-actions">
+            <button class="cart-go-order" onclick="goToOrderPage()">Перейти к заказу</button>
+            <button class="cart-clear" onclick="clearCart()">Очистить корзину</button>
+        </div>
+
+    </div>
+</div>
+</main>
+
+
+
+</body>
+</html>
